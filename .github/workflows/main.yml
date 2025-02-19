@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: macos-latest  # Uses the latest macOS runner (ARM by default)
+    runs-on: macos-latest  # Uses macOS runner (ARM64 by default)
 
     steps:
       - name: Checkout repository
@@ -13,10 +13,9 @@ jobs:
       - name: Set macOS Deployment Target
         run: echo "MACOSX_DEPLOYMENT_TARGET=10.12" >> $GITHUB_ENV
 
-      - name: Install Python 3.8 (x86_64)
+      - name: Use Preinstalled Python 3.8 (x86_64)
         run: |
-          arch -x86_64 /opt/homebrew/bin/brew install python@3.8  # ✅ Use correct Homebrew path
-          arch -x86_64 /opt/homebrew/bin/python3.8 -m venv venv  # ✅ Create x86_64 virtualenv
+          arch -x86_64 /usr/bin/python3 -m venv venv  # ✅ Use GitHub's preinstalled Intel Python
 
       - name: Set up Python Virtual Environment (x86_64)
         run: |
