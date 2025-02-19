@@ -15,8 +15,8 @@ jobs:
 
       - name: Install Python 3.8 (x86_64)
         run: |
-          arch -x86_64 /usr/local/bin/brew install python@3.8  # ✅ Install Intel version
-          arch -x86_64 /usr/local/bin/python3.8 -m venv venv  # ✅ Create x86_64 virtualenv
+          arch -x86_64 /opt/homebrew/bin/brew install python@3.8  # ✅ Use correct Homebrew path
+          arch -x86_64 /opt/homebrew/bin/python3.8 -m venv venv  # ✅ Create x86_64 virtualenv
 
       - name: Set up Python Virtual Environment (x86_64)
         run: |
