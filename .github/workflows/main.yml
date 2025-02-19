@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: macos-latest  # Uses the latest macOS runner
+    runs-on: macos-latest  # Uses the latest macOS runner (ARM by default)
 
     steps:
       - name: Checkout repository
@@ -13,25 +13,24 @@ jobs:
       - name: Set macOS Deployment Target
         run: echo "MACOSX_DEPLOYMENT_TARGET=10.12" >> $GITHUB_ENV
 
-      - name: Install Python 3.8
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.8"
-
-      - name: Set up Python Virtual Environment
+      - name: Install Python 3.8 (x86_64)
         run: |
-          python3 -m venv venv
+          arch -x86_64 /usr/local/bin/brew install python@3.8  # ✅ Install Intel version
+          arch -x86_64 /usr/local/bin/python3.8 -m venv venv  # ✅ Create x86_64 virtualenv
+
+      - name: Set up Python Virtual Environment (x86_64)
+        run: |
           source venv/bin/activate
-          python3 -m pip install --upgrade pip
-          pip install pandas  # ✅ Fix missing pandas issue
-          pip install pyinstaller==6.12.0  # ✅ Latest stable PyInstaller
-          pip install PyQt6==6.2.3  # ✅ Last version that supports macOS Sierra
-          pip install setuptools==58  # ✅ Avoid compatibility issues
+          arch -x86_64 python3 -m pip install --upgrade pip
+          arch -x86_64 pip install pandas  # ✅ Install x86_64 version of pandas
+          arch -x86_64 pip install pyinstaller==6.12.0  # ✅ Install latest PyInstaller
+          arch -x86_64 pip install PyQt6==6.2.3  # ✅ Last version that supports macOS Sierra
+          arch -x86_64 pip install setuptools==58  # ✅ Avoid compatibility issues
 
       - name: Debug Repository Structure
         run: ls -R  # ✅ List files to verify `main.py` exists
 
-      - name: Build macOS App (Fix pandas issue)
+      - name: Build macOS App (x86_64 only)
         run: |
           source venv/bin/activate
           pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 --hidden-import=pandas main.py
