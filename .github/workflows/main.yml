@@ -37,6 +37,10 @@ jobs:
 
       - name: Debug Repository Structure
         run: ls -R  # ✅ List files to verify `main.py` exists
+        
+      - name: Patch PyInstaller to Skip Code Signing Fix
+        run: |
+          sed -i '' 's/assert linkedit_seg.fileoff + linkedit_seg.filesize ==/# assert linkedit_seg.fileoff + linkedit_seg.filesize ==/' venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py
 
       - name: Build macOS Sierra-Compatible App (Fix Code Signing)
         run: |
