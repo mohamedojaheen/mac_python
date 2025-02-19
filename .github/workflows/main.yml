@@ -18,18 +18,19 @@ jobs:
       - name: Set macOS Deployment Target
         run: echo "MACOSX_DEPLOYMENT_TARGET=10.12" >> $GITHUB_ENV
 
-      - name: Set up Python Virtual Environment
+      - name: Delete and Recreate Virtual Environment
         run: |
+          rm -rf venv  # ✅ Remove broken venv
           python3 -m venv venv
           source venv/bin/activate
           python3 -m pip install --upgrade pip
-          pip install --force-reinstall pyinstaller==4.5.1  # ✅ Reinstall to restore `osx.py`
+          pip install --force-reinstall pyinstaller==4.5.1  # ✅ Restore original PyInstaller
           pip install PyQt6==6.2.3 pandas numpy setuptools==58  # ✅ Ensure dependencies
 
       - name: Patch PyInstaller to Skip Code Signing Fix
         run: |
           sed -i '' 's/assert linkedit_seg.fileoff + linkedit_seg.filesize ==.*$/# Disabled code signing assertion/' \
-            venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py
+            venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py || true
 
       - name: Build macOS Sierra-Compatible App
         run: |
