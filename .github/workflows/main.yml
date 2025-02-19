@@ -13,14 +13,19 @@ jobs:
       - name: Set macOS Deployment Target
         run: echo "MACOSX_DEPLOYMENT_TARGET=10.12" >> $GITHUB_ENV
 
+      - name: Install Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
       - name: Set up Python Virtual Environment
         run: |
           python3 -m venv venv
           source venv/bin/activate
           python3 -m pip install --upgrade pip
-          pip install pyinstaller==4.5.1  # Use the latest available 4.x version
-          pip install PyQt6==6.2.3  # Last PyQt6 version supporting Sierra
-          pip install setuptools==58  # Avoid compatibility issues
+          pip install pyinstaller==4.5.1  # Last compatible version
+          pip install PyQt6==6.2.3  # Last version that supports macOS Sierra
+          pip install setuptools==58  # Avoids compatibility issues
 
       - name: Build macOS Sierra-Compatible App
         run: |
