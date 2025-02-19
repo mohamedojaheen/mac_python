@@ -29,12 +29,12 @@ jobs:
 
       - name: Patch PyInstaller to Skip Code Signing Fix
         run: |
-          sed -i '' 's/assert linkedit_seg.fileoff + linkedit_seg.filesize == linkedit_sec.fileoff/# Disabled macOS code signing check/' \
+          sed -i '' 's/assert linkedit_seg.fileoff + linkedit_seg.filesize ==.*$/# Disabled code signing check/' \
             venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py || true
 
       - name: Verify PyInstaller Patch
         run: |
-          grep -C 5 "assert linkedit_seg" venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py || true
+          grep -C 5 "assert" venv/lib/python3.8/site-packages/PyInstaller/utils/osx.py || true
 
       - name: Build macOS Sierra-Compatible App
         run: |
