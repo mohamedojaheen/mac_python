@@ -27,13 +27,13 @@ jobs:
           pip install PyQt6==6.2.3  # Last version that supports macOS Sierra
           pip install setuptools==58  # Avoids compatibility issues
 
-      - name: Check Repository Files
-        run: ls -R  # Lists all files to verify `main.py` exists
+      - name: Debug Repository Structure
+        run: ls -R  # List all files & directories to find `main.py`
 
       - name: Build macOS Sierra-Compatible App
         run: |
           source venv/bin/activate
-          pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 --workpath=. main.py
+          pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 main.py
 
       - name: Upload built app
         uses: actions/upload-artifact@v4
