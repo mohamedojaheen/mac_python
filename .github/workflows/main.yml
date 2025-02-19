@@ -1,0 +1,30 @@
+name: Build macOS Sierra Compatible App
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set macOS Deployment Target
+        run: echo "MACOSX_DEPLOYMENT_TARGET=10.12" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pyinstaller==4.10  # Ensure an older, stable PyInstaller
+          pip install PyQt6==6.2.3  # Last version supporting Sierra
+          pip install setuptools==58  # Avoid compatibility issues
+
+      - name: Build macOS Sierra-Compatible App
+        run: pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 main.py
+
+      - name: Upload built app
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS-App
+          path: dist/
