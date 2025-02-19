@@ -32,6 +32,8 @@ jobs:
         run: |
           find venv -name "*.so" -exec codesign --remove-signature {} \;
           find venv -name "*.dylib" -exec codesign --remove-signature {} \;
+          find venv -name "*.o" -exec codesign --remove-signature {} \;
+          find venv -name "*.bundle" -exec codesign --remove-signature {} \;
 
       - name: Debug Repository Structure
         run: ls -R  # ✅ List files to verify `main.py` exists
@@ -41,8 +43,7 @@ jobs:
           source venv/bin/activate
           pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 \
                       --hidden-import=pandas --hidden-import=numpy \
-                      --osx-bundle-identifier=com.dummy.placeholder \
-                      --codesign-disable main.py
+                      --osx-bundle-identifier=com.dummy.placeholder main.py
 
       - name: Upload built app
         uses: actions/upload-artifact@v4
