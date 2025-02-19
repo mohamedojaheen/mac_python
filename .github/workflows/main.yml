@@ -29,10 +29,11 @@ jobs:
       - name: Debug Repository Structure
         run: ls -R  # ✅ List files to verify `main.py` exists
 
-      - name: Build macOS App (x86_64 only)
+      - name: Build macOS App (Fix numpy issue)
         run: |
           source venv/bin/activate
-          pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 --hidden-import=pandas main.py
+          pyinstaller --windowed --name="YourAppName" --target-arch=x86_64 --hidden-import=pandas --hidden-import=numpy main.py
+
 
       - name: Upload built app
         uses: actions/upload-artifact@v4
