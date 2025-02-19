@@ -23,17 +23,17 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           python3 -m pip install --upgrade pip
-          pip install pyinstaller==4.5.1  # ✅ Keep PyInstaller at version that worked
+          pip install pyinstaller==4.5.1  # ✅ Keep PyInstaller at the version that worked
           pip install PyQt6==6.2.3  # ✅ Last version that supports macOS Sierra
           pip install setuptools==58  # ✅ Avoid compatibility issues
           pip install pandas numpy  # ✅ Ensure `pandas` and `numpy` are installed
 
       - name: Remove Existing Code Signatures (Fixes PyInstaller Signing Issue)
         run: |
-          find venv -name "*.so" -exec codesign --remove-signature {} \;
-          find venv -name "*.dylib" -exec codesign --remove-signature {} \;
-          find venv -name "*.o" -exec codesign --remove-signature {} \;
-          find venv -name "*.bundle" -exec codesign --remove-signature {} \;
+          find venv -name "*.so" -exec codesign --remove-signature {} \; || true
+          find venv -name "*.dylib" -exec codesign --remove-signature {} \; || true
+          find venv -name "*.o" -exec codesign --remove-signature {} \; || true
+          find venv -name "*.bundle" -exec codesign --remove-signature {} \; || true
 
       - name: Debug Repository Structure
         run: ls -R  # ✅ List files to verify `main.py` exists
